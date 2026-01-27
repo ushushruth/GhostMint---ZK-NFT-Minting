@@ -200,41 +200,40 @@ export default function MintPage() {
 
             {/* Glass Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between px-8 py-5">
-                    <Link href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-                        <img src="/logo.png" alt="MintGhost" className="w-10 h-10" />
-                        <span className="text-xl font-semibold tracking-tight">MintGhost</span>
+                <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-4 md:py-5">
+                    <Link href="/" className="flex items-center gap-3 md:gap-4 hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="MintGhost" className="w-8 h-8 md:w-10 md:h-10" />
+                        <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </Link>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4 md:gap-6">
                         {mounted && <WalletMultiButton />}
                     </div>
                 </div>
             </nav>
 
             {/* Mint Section */}
-            <div className={`relative z-10 flex flex-col items-center justify-center min-h-screen px-8 pt-20 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className={`relative z-10 flex flex-col items-center justify-center min-h-screen px-4 md:px-8 pt-20 pb-10 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="w-full max-w-xl">
-                    <div className="text-center mb-12">
-                        <h1 className="text-5xl font-semibold mb-4 tracking-tight">Mint Your NFT</h1>
-                        <p className="text-xl text-zinc-400">Enter your secret permit to claim your private NFT</p>
+                    <div className="text-center mb-8 md:mb-12">
+                        <h1 className="text-3xl md:text-5xl font-semibold mb-3 md:mb-4 tracking-tight">Mint Your NFT</h1>
+                        <p className="text-base md:text-xl text-zinc-400">Enter your secret permit to claim your private NFT</p>
                     </div>
 
-                    {/* Glass Card */}
-                    <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] p-10">
+                    <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] p-6 md:p-10">
                         {publicKey ? (
-                            <div className="mb-10 pb-8 border-b border-white/10">
-                                <span className="text-sm text-zinc-500 font-medium">Wallet Connected</span>
-                                <p className="text-lg text-violet-400 font-mono mt-2 truncate">{publicKey.toString()}</p>
+                            <div className="mb-6 md:mb-10 pb-6 md:pb-8 border-b border-white/10">
+                                <span className="text-xs md:text-sm text-zinc-500 font-medium">Wallet Connected</span>
+                                <p className="text-sm md:text-lg text-violet-400 font-mono mt-2 truncate">{publicKey.toString()}</p>
                             </div>
                         ) : (
-                            <div className="mb-10 pb-8 border-b border-white/10 text-center">
-                                <p className="text-xl text-zinc-400 mb-6">Connect your wallet to continue</p>
+                            <div className="mb-6 md:mb-10 pb-6 md:pb-8 border-b border-white/10 text-center">
+                                <p className="text-base md:text-xl text-zinc-400 mb-4 md:mb-6">Connect your wallet to continue</p>
                                 {mounted && <WalletMultiButton />}
                             </div>
                         )}
 
-                        <div className="mb-8">
-                            <label className="text-sm text-zinc-400 font-medium block mb-3">
+                        <div className="mb-6 md:mb-8">
+                            <label className="text-xs md:text-sm text-zinc-400 font-medium block mb-2 md:mb-3">
                                 Secret Permit
                             </label>
                             <input
@@ -242,25 +241,25 @@ export default function MintPage() {
                                 value={secret}
                                 onChange={(e) => set_secret(e.target.value)}
                                 placeholder="Enter your secret"
-                                className="w-full bg-black/50 border border-white/10 px-6 py-5 text-xl focus:border-violet-500/50 focus:outline-none transition-colors placeholder:text-zinc-600 font-mono backdrop-blur-sm"
+                                className="w-full bg-black/50 border border-white/10 px-4 md:px-6 py-4 md:py-5 text-base md:text-xl focus:border-violet-500/50 focus:outline-none transition-colors placeholder:text-zinc-600 font-mono backdrop-blur-sm"
                             />
                         </div>
 
                         <button
                             onClick={handle_mint}
                             disabled={!publicKey || loading || !secret}
-                            className="w-full py-5 bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 text-xl font-semibold transition-all disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/20"
+                            className="w-full py-4 md:py-5 bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 text-base md:text-xl font-semibold transition-all disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/20"
                         >
                             {loading ? (
-                                <span className="flex items-center justify-center gap-3">
-                                    <span className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    {status}
+                                <span className="flex items-center justify-center gap-2 md:gap-3">
+                                    <span className="w-5 h-5 md:w-6 md:h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span className="text-sm md:text-base">{status}</span>
                                 </span>
                             ) : 'Verify & Mint NFT'}
                         </button>
 
                         {status && !loading && (
-                            <div className={`mt-8 p-5 text-center text-lg font-medium backdrop-blur-sm ${status.includes('Success') ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
+                            <div className={`mt-6 md:mt-8 p-4 md:p-5 text-center text-sm md:text-lg font-medium backdrop-blur-sm ${status.includes('Success') ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
                                 status.includes('Already') || status.includes('Invalid') || status.includes('Error') ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
                                     'bg-white/5 border border-white/10 text-zinc-300'
                                 }`}>
@@ -273,7 +272,7 @@ export default function MintPage() {
                                 href={`https://explorer.solana.com/tx/${txsignature}?cluster=devnet`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block mt-6 text-center text-lg text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                                className="block mt-4 md:mt-6 text-center text-sm md:text-lg text-violet-400 hover:text-violet-300 transition-colors font-medium"
                             >
                                 View on Solana Explorer →
                             </a>
