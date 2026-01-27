@@ -1,5 +1,4 @@
-#!/bin/bash
-# Generate proofs for all 5 secrets
+
 
 CIRCUIT_PATH="/Users/shush/Documents/mintghost"
 SUNSPOT_PATH="/Users/shush/Documents/sunspot/sunspot/go"
@@ -9,7 +8,7 @@ mkdir -p "$OUTPUT_DIR"
 
 ROOT="0x151b3a67da88e360c0ebd027a012e4064c3a414e20a5586533fe182b31227198"
 
-# Secret 1001
+#secret 1001
 cat > "$CIRCUIT_PATH/Prover.toml" << 'EOF'
 the_secret = "1001"
 index = 0
@@ -22,7 +21,7 @@ cp "$CIRCUIT_PATH/target/mintghost.proof" "$OUTPUT_DIR/1001.proof"
 cp "$CIRCUIT_PATH/target/mintghost.pw" "$OUTPUT_DIR/1001.pw"
 echo "Done: 1001"
 
-# Secret 1002
+#secret 1002
 cat > "$CIRCUIT_PATH/Prover.toml" << 'EOF'
 the_secret = "1002"
 index = 1
@@ -35,7 +34,7 @@ cp "$CIRCUIT_PATH/target/mintghost.proof" "$OUTPUT_DIR/1002.proof"
 cp "$CIRCUIT_PATH/target/mintghost.pw" "$OUTPUT_DIR/1002.pw"
 echo "Done: 1002"
 
-# Secret 1003
+#secret 1003
 cat > "$CIRCUIT_PATH/Prover.toml" << 'EOF'
 the_secret = "1003"
 index = 2
@@ -48,7 +47,7 @@ cp "$CIRCUIT_PATH/target/mintghost.proof" "$OUTPUT_DIR/1003.proof"
 cp "$CIRCUIT_PATH/target/mintghost.pw" "$OUTPUT_DIR/1003.pw"
 echo "Done: 1003"
 
-# Secret 1004
+#secret 1004
 cat > "$CIRCUIT_PATH/Prover.toml" << 'EOF'
 the_secret = "1004"
 index = 3
@@ -61,7 +60,7 @@ cp "$CIRCUIT_PATH/target/mintghost.proof" "$OUTPUT_DIR/1004.proof"
 cp "$CIRCUIT_PATH/target/mintghost.pw" "$OUTPUT_DIR/1004.pw"
 echo "Done: 1004"
 
-# Secret 1005
+#secret 1005
 cat > "$CIRCUIT_PATH/Prover.toml" << 'EOF'
 the_secret = "1005"
 index = 4
