@@ -166,15 +166,20 @@ export default function Home() {
                 <div className="max-w-6xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
                         <div className={`transition-all duration-700 ${techInView ? 'opacity-100 translate-x-0' : 'opacity-0 md:-translate-x-16'}`}>
-                            <h2 className="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Built with Noir</h2>
+                            <h2 className="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Built with Noir & Solana</h2>
                             <p className="text-base md:text-xl text-zinc-400 leading-relaxed mb-6 md:mb-10">
                                 Noir is a domain-specific language designed for writing zero-knowledge circuits.
-                                Combined with Groth16 proofs and Solana speed, MintGhost delivers
-                                privacy-preserving NFT minting with sub-second verification.
+                                MintGhost leverages Solana's high-performance blockchain to verify these Groth16 proofs on-chain,
+                                enabling privacy-preserving NFT minting with sub-second finality and negligible fees.
                             </p>
-                            <a href="https://noir-lang.org" target="_blank" className="inline-flex items-center gap-2 text-lg md:text-xl text-violet-400 hover:text-violet-300 transition-colors font-medium">
-                                Learn more about Noir →
-                            </a>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+                                <a href="https://noir-lang.org" target="_blank" className="inline-flex items-center gap-2 text-lg md:text-xl text-violet-400 hover:text-violet-300 transition-colors font-medium">
+                                    Learn more about Noir →
+                                </a>
+                                <a href="https://solana.com" target="_blank" className="inline-flex items-center gap-2 text-lg md:text-xl text-green-400 hover:text-green-300 transition-colors font-medium">
+                                    Learn more about Solana →
+                                </a>
+                            </div>
                         </div>
                         <div className={`transition-all duration-700 delay-200 ${techInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'}`}>
                             <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] overflow-hidden">
