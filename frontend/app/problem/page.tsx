@@ -71,17 +71,17 @@ export default function ProblemPage() {
                 </div>
             </nav>
 
-            <section ref={problemRef} className="relative z-10 py-32 px-4 md:px-8">
+            <section ref={problemRef} className="relative z-10 py-20 md:py-32 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className={`text-5xl md:text-7xl font-bold text-center mb-16 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <h1 className={`text-3xl md:text-7xl font-bold text-center mb-8 md:mb-16 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                         The <span className="text-red-500">Problem</span>
                     </h1>
-                    <p className={`text-xl text-zinc-400 text-center max-w-3xl mx-auto mb-20 leading-relaxed transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <p className={`text-base md:text-xl text-zinc-400 text-center max-w-3xl mx-auto mb-10 md:mb-20 leading-relaxed transition-all duration-700 delay-100 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                         Public blockchains are transparent by design. While this ensures trust, it destroys privacy.
                         Every transaction, balance, and interaction is visible to the entire world.
                     </p>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                         {[
                             { title: 'Total Transparency', desc: 'Your wallet balance and entire transaction history are public record. Anyone can see exactly how much you own and where you send it.' },
                             { title: 'Identity Linking', desc: 'Once your wallet is doxxed (e.g. by sending from an exchange), your entire financial life is linked to your real-world identity forever.' },
@@ -90,17 +90,17 @@ export default function ProblemPage() {
                         ].map((item, i) => (
                             <div
                                 key={i}
-                                className={`p-10 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-red-500/30 transition-all duration-700 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                                className={`p-5 md:p-10 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-red-500/30 transition-all duration-700 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                                 style={{ transitionDelay: `${i * 100}ms` }}
                             >
-                                <h3 className="text-2xl font-bold mb-4 text-red-400">{item.title}</h3>
-                                <p className="text-zinc-400 text-lg leading-relaxed">{item.desc}</p>
+                                <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 text-red-400">{item.title}</h3>
+                                <p className="text-zinc-400 text-sm md:text-lg leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
 
-                    <div className={`mt-20 text-center transition-all duration-700 delay-500 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-                        <Link href="/solution" className="inline-block border border-white/10 hover:border-violet-500 hover:bg-violet-500/10 px-10 py-5 text-xl font-medium transition-all">
+                    <div className={`mt-10 md:mt-20 text-center transition-all duration-700 delay-500 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                        <Link href="/solution" className="inline-block border border-white/10 hover:border-violet-500 hover:bg-violet-500/10 px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-medium transition-all">
                             See The Solution →
                         </Link>
                     </div>

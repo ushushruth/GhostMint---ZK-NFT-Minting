@@ -80,40 +80,49 @@ export default function SolutionPage() {
                 </div>
             </nav>
 
-            <section ref={flowRef} className="relative z-10 py-32 px-4 md:px-8">
+            <section ref={flowRef} className="relative z-10 py-20 md:py-32 px-4 md:px-8">
                 <div className="max-w-5xl mx-auto">
-                    <h1 className={`text-5xl md:text-7xl font-bold text-center mb-20 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <h1 className={`text-3xl md:text-7xl font-bold text-center mb-10 md:mb-20 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                         Our <span className="text-violet-400">Solution</span>
                     </h1>
 
                     <div className="relative">
-                        {/* Connecting Line (Mobile: straight, Desktop: squiggly vertical guide) */}
-                        <div className={`absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-violet-500/20 via-pink-500/20 to-blue-500/20 md:hidden`}></div>
+                        {/* Connecting Line (Mobile: straight vertical line on left) */}
+                        <div className="absolute left-5 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-violet-500/30 via-pink-500/30 to-blue-500/30 md:hidden"></div>
 
                         {steps.map((step, i) => (
-                            <div key={i} className={`relative flex flex-col md:flex-row items-center mb-32 transition-all duration-700 ${flowInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} style={{ transitionDelay: `${i * 100}ms` }}>
+                            <div key={i} className={`relative flex flex-col md:flex-row items-start md:items-center mb-6 md:mb-32 transition-all duration-700 ${flowInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} style={{ transitionDelay: `${i * 100}ms` }}>
 
-                                {/* Left Side Content */}
-                                <div className="w-full md:w-1/2 md:px-12 md:text-right">
+                                {/* Mobile: Step indicator dot */}
+                                <div className="md:hidden absolute left-3 top-5 w-4 h-4 rounded-full bg-gradient-to-br from-violet-500 to-pink-500 z-10 shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+
+                                {/* Mobile: Card (always renders for both left/right steps) */}
+                                <div className="md:hidden ml-10 w-full pr-2">
+                                    <div className={`bg-zinc-900/50 border border-white/10 p-4 rounded-xl ${step.side === 'left' ? 'border-l-2 border-l-violet-500' : 'border-l-2 border-l-pink-500'}`}>
+                                        <h3 className={`text-base font-bold mb-1 ${step.side === 'left' ? 'text-violet-400' : 'text-pink-400'}`}>{step.title}</h3>
+                                        <p className="text-zinc-400 text-sm leading-relaxed">{step.desc}</p>
+                                    </div>
+                                </div>
+
+                                {/* Desktop: Left Side Content */}
+                                <div className="hidden md:block w-1/2 px-12 text-right">
                                     {step.side === 'left' && (
                                         <div className="bg-zinc-900/50 border border-white/10 p-8 rounded-2xl relative group hover:border-violet-500/30 transition-all z-20">
-                                            <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-violet-500 rounded-full hidden md:block group-hover:scale-125 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.5)]"></div>
+                                            <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-violet-500 rounded-full group-hover:scale-125 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.5)]"></div>
                                             <h3 className="text-2xl font-bold text-violet-400 mb-2">{step.title}</h3>
                                             <p className="text-zinc-400">{step.desc}</p>
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Center Spacer (No Icon) */}
-                                <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 z-10">
-                                    {/* Empty center */}
-                                </div>
+                                {/* Desktop: Center Spacer */}
+                                <div className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 z-10"></div>
 
-                                {/* Right Side Content */}
-                                <div className="w-full md:w-1/2 md:px-12">
+                                {/* Desktop: Right Side Content */}
+                                <div className="hidden md:block w-1/2 px-12">
                                     {step.side === 'right' && (
                                         <div className="bg-zinc-900/50 border border-white/10 p-8 rounded-2xl relative group hover:border-pink-500/30 transition-all z-20">
-                                            <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-pink-500 rounded-full hidden md:block group-hover:scale-125 transition-transform shadow-[0_0_15px_rgba(236,72,153,0.5)]"></div>
+                                            <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-6 h-6 bg-pink-500 rounded-full group-hover:scale-125 transition-transform shadow-[0_0_15px_rgba(236,72,153,0.5)]"></div>
                                             <h3 className="text-2xl font-bold text-pink-400 mb-2">{step.title}</h3>
                                             <p className="text-zinc-400">{step.desc}</p>
                                         </div>
@@ -149,8 +158,8 @@ export default function SolutionPage() {
                         ))}
                     </div>
 
-                    <div className={`mt-10 text-center transition-all duration-700 delay-700 ${flowInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-                        <Link href="/mint" className="inline-block bg-white text-black px-10 py-5 text-xl font-bold hover:bg-zinc-200 transition-all hover:scale-105 transform">
+                    <div className={`mt-6 md:mt-10 text-center transition-all duration-700 delay-700 ${flowInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                        <Link href="/mint" className="inline-block bg-white text-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-bold hover:bg-zinc-200 transition-all hover:scale-105 transform">
                             Start Minting Now
                         </Link>
                     </div>
