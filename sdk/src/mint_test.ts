@@ -44,8 +44,6 @@ async function main() {
 
 
 
-
-
     //discriminator
     const discriminator = createHash('sha256').update('global:verify_proof').digest().slice(0, 8);
     console.log('Discriminator:', discriminator.toString('hex'));
