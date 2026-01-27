@@ -83,6 +83,7 @@ function RoadmapItem({ item, index }: { item: any, index: number }) {
 
 export default function RoadmapPage() {
     const [mounted, setMounted] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const roadmapRef = useRef<HTMLDivElement>(null);
     const roadmapInView = useInView(roadmapRef);
 
@@ -136,9 +137,48 @@ export default function RoadmapPage() {
                             Launch App →
                         </Link>
                     </div>
-                    <Link href="/mint" className="md:hidden bg-violet-600 hover:bg-violet-500 px-4 py-2 text-sm font-medium">
-                        Mint →
-                    </Link>
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="md:hidden text-white p-2"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    >
+                        {mobileMenuOpen ? (
+                            <span className="text-2xl">✕</span>
+                        ) : (
+                            <span className="text-2xl">☰</span>
+                        )}
+                    </button>
+
+                    {/* Mobile Menu Overlay */}
+                    {mobileMenuOpen && (
+                        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden transition-all duration-300">
+                            <button
+                                className="absolute top-6 right-6 text-zinc-400 hover:text-white p-2"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                <span className="text-3xl">✕</span>
+                            </button>
+
+                            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
+                                Home
+                            </Link>
+                            <Link href="/roadmap" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
+                                Roadmap
+                            </Link>
+                            <a href="https://noir-lang.org" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                Noir
+                            </a>
+                            <a href="https://solana.com" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                Solana
+                            </a>
+                            <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                GitHub
+                            </a>
+                            <Link href="/mint" onClick={() => setMobileMenuOpen(false)} className="bg-violet-600 px-8 py-4 text-xl font-bold rounded-lg hover:bg-violet-500 transition-colors mt-4">
+                                Launch App
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </nav>
 

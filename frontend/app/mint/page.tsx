@@ -30,6 +30,7 @@ export default function MintPage() {
     const [loading, set_loading] = useState(false);
     const [txsignature, set_txsignature] = useState('');
     const [mounted, set_mounted] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [permits, set_permits] = useState<any>(null);
 
     useEffect(() => {
@@ -209,7 +210,52 @@ export default function MintPage() {
                         <Link href="/" className="text-zinc-400 hover:text-white transition-colors hidden md:block">
                             Home
                         </Link>
-                        {mounted && <WalletMultiButton />}
+                        <div className="hidden md:block">
+                            {mounted && <WalletMultiButton />}
+                        </div>
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            className="md:hidden text-white p-2"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        >
+                            {mobileMenuOpen ? (
+                                <span className="text-2xl">✕</span>
+                            ) : (
+                                <span className="text-2xl">☰</span>
+                            )}
+                        </button>
+
+                        {/* Mobile Menu Overlay */}
+                        {mobileMenuOpen && (
+                            <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden transition-all duration-300">
+                                <button
+                                    className="absolute top-6 right-6 text-zinc-400 hover:text-white p-2"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                >
+                                    <span className="text-3xl">✕</span>
+                                </button>
+
+                                <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
+                                    Home
+                                </Link>
+                                <Link href="/roadmap" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
+                                    Roadmap
+                                </Link>
+                                <a href="https://noir-lang.org" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                    Noir
+                                </a>
+                                <a href="https://solana.com" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                    Solana
+                                </a>
+                                <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
+                                    GitHub
+                                </a>
+                                <div className="mt-4 transform scale-125">
+                                    {mounted && <WalletMultiButton />}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </nav>
