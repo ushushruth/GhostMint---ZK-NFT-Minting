@@ -134,3 +134,6 @@ GhostMint---ZK-NFT-Minting/
 
 ---
 
+## License
+
+This project is open source and licensed under the **Apache License 2.0**.
