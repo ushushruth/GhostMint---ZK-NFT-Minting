@@ -60,68 +60,23 @@ export default function Home() {
                         <img src="/logo.png" alt="MintGhost" className="w-8 h-8 md:w-10 md:h-10" />
                         <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </div>
-                    <div className="hidden md:flex items-center gap-10">
-                        <Link href="/" className="text-zinc-400 hover:text-white transition-colors">
+                    <div className="flex items-center gap-4 md:gap-10">
+                        <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
                             Home
                         </Link>
-                        <a href="https://noir-lang.org" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
-                            Noir
-                        </a>
-                        <a href="https://solana.com" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
-                            Solana
-                        </a>
-                        <Link href="/roadmap" className="text-zinc-400 hover:text-white transition-colors">
+                        <Link href="/roadmap" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
                             Roadmap
                         </Link>
-                        <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
+                        <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="hidden md:block text-zinc-400 hover:text-white transition-colors">
                             GitHub
                         </a>
-                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">
+                        <Link href="/mint" className="hidden md:block bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">
                             Launch App →
                         </Link>
                     </div>
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="md:hidden text-white p-2"
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    >
-                        {mobileMenuOpen ? (
-                            <span className="text-2xl">✕</span>
-                        ) : (
-                            <span className="text-2xl">☰</span>
-                        )}
-                    </button>
-
-                    {/* Mobile Menu Overlay */}
-                    {mobileMenuOpen && (
-                        <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 md:hidden transition-all duration-300">
-                            <button
-                                className="absolute top-6 right-6 text-zinc-400 hover:text-white p-2"
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                <span className="text-3xl">✕</span>
-                            </button>
-
-                            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
-                                Home
-                            </Link>
-                            <Link href="/roadmap" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-violet-400 transition-colors">
-                                Roadmap
-                            </Link>
-                            <a href="https://noir-lang.org" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
-                                Noir
-                            </a>
-                            <a href="https://solana.com" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
-                                Solana
-                            </a>
-                            <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-xl text-zinc-400 hover:text-white transition-colors">
-                                GitHub
-                            </a>
-                            <Link href="/mint" onClick={() => setMobileMenuOpen(false)} className="bg-violet-600 px-8 py-4 text-xl font-bold rounded-lg hover:bg-violet-500 transition-colors mt-4">
-                                Launch App
-                            </Link>
-                        </div>
-                    )}
+                    <Link href="/mint" className="md:hidden bg-violet-600 hover:bg-violet-500 px-4 py-2 text-sm font-medium rounded-lg">
+                        Mint →
+                    </Link>
                 </div>
             </nav>
 
@@ -136,7 +91,7 @@ export default function Home() {
                     </h1>
                     <p className="text-lg md:text-2xl text-zinc-400 max-w-2xl mx-auto mb-8 md:mb-14 leading-relaxed px-2">
                         Prove you have a valid mint permit without revealing which one.
-                        Zero-knowledge proofs Built with <b>Noir Verified on Solana.</b>
+                        Zero-knowledge proofs Built with <a href="https://noir-lang.org" target="_blank" className="font-semibold text-white hover:text-violet-400 transition-colors">Noir</a> Verified on <a href="https://solana.com" target="_blank" className="font-semibold text-white hover:text-violet-400 transition-colors">Solana</a>.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
                         <Link href="/mint" className="w-full sm:w-auto bg-white text-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-semibold hover:bg-zinc-100 transition-all hover:shadow-xl hover:shadow-white/10">
