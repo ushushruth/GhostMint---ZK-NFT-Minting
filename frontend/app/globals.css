@@ -26,17 +26,25 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 6px !important;
   font-family: inherit !important;
-  font-size: 18px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   letter-spacing: 0 !important;
   text-transform: none !important;
-  padding: 10px 20px !important;
+  padding: 8px 12px !important;
   transition: all 0.2s ease !important;
   color: white !important;
   cursor: pointer !important;
   display: inline-flex !important;
   align-items: center !important;
   height: auto !important;
+  white-space: nowrap !important;
+}
+
+@media (min-width: 768px) {
+  .wallet-adapter-button {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+  }
 }
 
 .wallet-adapter-button:hover {

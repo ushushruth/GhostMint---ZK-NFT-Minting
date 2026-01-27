@@ -30,6 +30,7 @@ export default function MintPage() {
     const [loading, set_loading] = useState(false);
     const [txsignature, set_txsignature] = useState('');
     const [mounted, set_mounted] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [permits, set_permits] = useState<any>(null);
 
     useEffect(() => {
@@ -200,27 +201,42 @@ export default function MintPage() {
 
             {/* Glass Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-4 md:py-5">
-                    <Link href="/" className="flex items-center gap-3 md:gap-4 hover:opacity-80 transition-opacity">
-                        <img src="/logo.png" alt="MintGhost" className="w-8 h-8 md:w-10 md:h-10" />
-                        <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
+                <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3 md:py-5">
+                    <Link href="/" className="flex items-center gap-2 md:gap-4 hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="MintGhost" className="w-7 h-7 md:w-10 md:h-10" />
+                        <span className="text-base md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </Link>
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
-                            Home
-                        </Link>
-                        <Link href="/problem" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
-                            Problem
-                        </Link>
-                        <Link href="/solution" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
-                            Solution
-                        </Link>
-                        <Link href="/roadmap" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
-                            Roadmap
-                        </Link>
+                    {/* Desktop Nav */}
+                    <div className="hidden md:flex items-center gap-6">
+                        <Link href="/" className="text-base text-zinc-400 hover:text-white transition-colors">Home</Link>
+                        <Link href="/problem" className="text-base text-zinc-400 hover:text-white transition-colors">Problem</Link>
+                        <Link href="/solution" className="text-base text-zinc-400 hover:text-white transition-colors">Solution</Link>
+                        <Link href="/roadmap" className="text-base text-zinc-400 hover:text-white transition-colors">Roadmap</Link>
                         {mounted && <WalletMultiButton />}
                     </div>
+                    {/* Mobile: Wallet + Hamburger */}
+                    <div className="flex md:hidden items-center gap-2">
+                        {mounted && <WalletMultiButton />}
+                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-white">
+                            {mobileMenuOpen ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            )}
+                        </button>
+                    </div>
                 </div>
+                {/* Mobile Menu Dropdown */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-white/5 bg-black/90 backdrop-blur-xl">
+                        <div className="flex flex-col py-4 px-6 space-y-4">
+                            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Home</Link>
+                            <Link href="/problem" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Problem</Link>
+                            <Link href="/solution" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Solution</Link>
+                            <Link href="/roadmap" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Roadmap</Link>
+                        </div>
+                    </div>
+                )}
             </nav>
 
             {/* Mint Section */}

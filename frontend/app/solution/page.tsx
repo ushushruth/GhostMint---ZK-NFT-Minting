@@ -25,6 +25,7 @@ function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.1) {
 
 export default function SolutionPage() {
     const [mounted, setMounted] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const flowRef = useRef<HTMLDivElement>(null);
     const flowInView = useInView(flowRef);
 
@@ -52,32 +53,42 @@ export default function SolutionPage() {
                 style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
 
             <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-4 md:py-5">
-                    <Link href="/" className="flex items-center gap-3 md:gap-4">
-                        <img src="/logo.png" alt="MintGhost" className="w-8 h-8 md:w-10 md:h-10" />
-                        <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
+                <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 py-3 md:py-5">
+                    <Link href="/" className="flex items-center gap-2 md:gap-4">
+                        <img src="/logo.png" alt="MintGhost" className="w-7 h-7 md:w-10 md:h-10" />
+                        <span className="text-base md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </Link>
-                    <div className="flex items-center gap-4 md:gap-10">
-                        <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
-                            Home
-                        </Link>
-                        <Link href="/problem" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
-                            Problem
-                        </Link>
-                        <Link href="/solution" className="text-white font-medium text-sm md:text-base">
-                            Solution
-                        </Link>
-                        <Link href="/roadmap" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
-                            Roadmap
-                        </Link>
-                        <Link href="/mint" className="hidden md:block bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">
-                            Launch App →
-                        </Link>
+                    {/* Desktop Nav */}
+                    <div className="hidden md:flex items-center gap-10">
+                        <Link href="/" className="text-base text-zinc-400 hover:text-white transition-colors">Home</Link>
+                        <Link href="/problem" className="text-base text-zinc-400 hover:text-white transition-colors">Problem</Link>
+                        <Link href="/solution" className="text-white font-medium text-base">Solution</Link>
+                        <Link href="/roadmap" className="text-base text-zinc-400 hover:text-white transition-colors">Roadmap</Link>
+                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">Mint →</Link>
                     </div>
-                    <Link href="/mint" className="md:hidden bg-violet-600 hover:bg-violet-500 px-4 py-2 text-sm font-medium rounded-lg">
-                        Mint →
-                    </Link>
+                    {/* Mobile: Hamburger + Mint */}
+                    <div className="flex md:hidden items-center gap-3">
+                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-3 py-1.5 text-sm font-medium rounded-md">Mint →</Link>
+                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-white">
+                            {mobileMenuOpen ? (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            ) : (
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            )}
+                        </button>
+                    </div>
                 </div>
+                {/* Mobile Menu Dropdown */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-white/5 bg-black/90 backdrop-blur-xl">
+                        <div className="flex flex-col py-4 px-6 space-y-4">
+                            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Home</Link>
+                            <Link href="/problem" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Problem</Link>
+                            <Link href="/solution" onClick={() => setMobileMenuOpen(false)} className="text-white font-medium py-2">Solution</Link>
+                            <Link href="/roadmap" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Roadmap</Link>
+                        </div>
+                    </div>
+                )}
             </nav>
 
             <section ref={flowRef} className="relative z-10 py-20 md:py-32 px-4 md:px-8">
