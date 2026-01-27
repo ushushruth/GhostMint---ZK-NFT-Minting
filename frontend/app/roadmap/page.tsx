@@ -30,8 +30,8 @@ function RoadmapItem({ item, index }: { item: any, index: number }) {
     return (
         <div
             ref={ref}
-            className={`relative flex flex-col md:flex-row items-center mb-8 md:mb-16 transition-all duration-1000 transform ${inView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'}`}
-            style={{ transitionDelay: `${index % 2 * 150}ms` }}
+            className={`relative flex flex-col md:flex-row items-center mb-8 md:mb-16 transition-all duration-700 transform ${inView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'}`}
+            style={{ transitionDelay: `${index % 2 * 100}ms` }} // Minor stagger for side-by-side or rapid scroll
         >
             <div className={`w-full md:w-1/2 ${item.side === 'left' ? 'md:pr-16 md:text-right' : 'md:pl-16 md:order-2'}`}>
                 <div className={`relative group border ${item.borderColor} backdrop-blur-xl bg-gradient-to-br ${item.gradient} p-6 md:p-8 hover:scale-[1.02] transition-all duration-500 shadow-xl ${item.glowColor}`}>
@@ -73,7 +73,7 @@ function RoadmapItem({ item, index }: { item: any, index: number }) {
 
 
             <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-pink-500 items-center justify-center shadow-xl shadow-violet-500/50 z-10">
-                <div className={`w-4 h-4 rounded-full bg-white/90 transition-all duration-700 ${inView ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
+                <div className={`w-4 h-4 rounded-full bg-white/90 transition-all duration-500 ${inView ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
             </div>
 
             <div className={`hidden md:block w-1/2 ${item.side === 'left' ? 'md:order-2' : ''}`} />
@@ -119,6 +119,12 @@ export default function RoadmapPage() {
                     <div className="flex items-center gap-4 md:gap-10">
                         <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
                             Home
+                        </Link>
+                        <Link href="/problem" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
+                            Problem
+                        </Link>
+                        <Link href="/solution" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
+                            Solution
                         </Link>
                         <Link href="/roadmap" className="text-white font-medium text-sm md:text-base">
                             Roadmap

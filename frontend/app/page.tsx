@@ -61,8 +61,14 @@ export default function Home() {
                         <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </div>
                     <div className="flex items-center gap-4 md:gap-10">
-                        <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
+                        <Link href="/" className="text-white font-medium text-sm md:text-base">
                             Home
+                        </Link>
+                        <Link href="/problem" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
+                            Problem
+                        </Link>
+                        <Link href="/solution" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
+                            Solution
                         </Link>
                         <Link href="/roadmap" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
                             Roadmap

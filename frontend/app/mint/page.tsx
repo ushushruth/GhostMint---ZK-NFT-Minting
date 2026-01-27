@@ -209,6 +209,15 @@ export default function MintPage() {
                         <Link href="/" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors">
                             Home
                         </Link>
+                        <Link href="/problem" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
+                            Problem
+                        </Link>
+                        <Link href="/solution" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
+                            Solution
+                        </Link>
+                        <Link href="/roadmap" className="text-sm md:text-base text-zinc-400 hover:text-white transition-colors hidden md:block">
+                            Roadmap
+                        </Link>
                         {mounted && <WalletMultiButton />}
                     </div>
                 </div>
