@@ -1,0 +1,21 @@
+[package]
+name = "mintghost"
+version = "0.1.0"
+description = "Ghost Minting - ZK private allowlist NFT mint"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "mintghost"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+
+[dependencies]
+anchor-lang = { version = "0.29.0", features = ["init-if-needed"] }
+anchor-spl = "0.29.0"

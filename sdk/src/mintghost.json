@@ -1,0 +1,223 @@
+{
+    "version": "0.1.0",
+    "name": "mintghost",
+    "metadata": {
+        "address": "2LxBDEAhTM1XzZUpQqFqiWe2UMN7VN3bCs3CqL8FzhPw"
+    },
+    "instructions": [
+        {
+            "name": "initialize",
+            "accounts": [
+                {
+                    "name": "authority",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "mintghostAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "merkleRoot",
+                    "type": {
+                        "array": [
+                            "u8",
+                            32
+                        ]
+                    }
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "symbol",
+                    "type": "string"
+                },
+                {
+                    "name": "uri",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "updateRoot",
+            "accounts": [
+                {
+                    "name": "authority",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "config",
+                    "isMut": true,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "merkleRoot",
+                    "type": {
+                        "array": [
+                            "u8",
+                            32
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "mintProof",
+            "accounts": [
+                {
+                    "name": "minter",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "mintghostAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "nullifier",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "nftMint",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "tokenAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "tokenProgram",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "associatedTokenProgram",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "rent",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "proof",
+                    "type": "bytes"
+                },
+                {
+                    "name": "witness",
+                    "type": "bytes"
+                },
+                {
+                    "name": "nullifierHash",
+                    "type": {
+                        "array": [
+                            "u8",
+                            32
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "MintghostAccount",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "merkleRoot",
+                        "type": {
+                            "array": [
+                                "u8",
+                                32
+                            ]
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "symbol",
+                        "type": "string"
+                    },
+                    {
+                        "name": "uri",
+                        "type": "string"
+                    },
+                    {
+                        "name": "mintCount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Nullifier",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "used",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "InvalidWitness",
+            "msg": "Invalid witness format"
+        },
+        {
+            "code": 6001,
+            "name": "RootMismatch",
+            "msg": "Merkle root mismatch"
+        },
+        {
+            "code": 6002,
+            "name": "AlreadyMinted",
+            "msg": "Already minted with this proof"
+        }
+    ]
+}
