@@ -134,8 +134,3 @@ GhostMint---ZK-NFT-Minting/
 
 ---
 
-## Author
-
-**Shushruth U**  
-BTech Student  
-Blockchain • Zero‑Knowledge Proofs • Systems Programming
