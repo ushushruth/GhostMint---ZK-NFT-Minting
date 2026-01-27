@@ -1,7 +1,34 @@
-# GhostMint
+<div align="center">
 
-## Category
-App built with Noir
+<img src="assets/mintghost.png" alt="MintGhost Logo" width="220" />
+
+# MintGhost
+
+**Privacy‑Preserving NFT Minting on Solana using Noir & Zero‑Knowledge Proofs**
+
+App built for **Solana Privacy Hacks** — *Category: App built with Noir*
+
+</div>
+
+---
+
+## Overview
+
+MintGhost is a zero‑knowledge based NFT minting application on Solana.  
+It allows users to mint NFTs by **proving eligibility without revealing any private data on‑chain**.
+
+Proofs are generated off‑chain using Noir and Sunspot, and verified on‑chain by a Solana program.
+
+---
+
+## Features
+
+- Zero‑knowledge NFT minting
+- Noir circuits for private eligibility logic
+- Off‑chain proof generation
+- On‑chain verification on Solana
+- No allowlists or exposed mint conditions
+- Simple frontend for interaction
 
 ---
 
@@ -18,55 +45,32 @@ npm install
 npm run dev
 ```
 
-The application will be available at:
+App runs at:
+
 ```
 http://localhost:3000
 ```
 
 ---
 
-## Short Description
-
-GhostMint is a privacy-preserving NFT minting application on Solana built using zero-knowledge proofs with Noir.
-Users can mint NFTs by proving eligibility without revealing private inputs or minting conditions on-chain.
-
-The project demonstrates a complete zero-knowledge NFT workflow, combining off-chain proof generation with on-chain verification.
-
----
-
-## Demo Flow
-
-```bash
-# Connect wallet
-# Generate proof locally
-# Submit proof to Solana program
-# Mint NFT on successful verification
-```
-
-1. User connects a Solana wallet through the frontend  
-2. User provides private input required by the Noir circuit  
-3. A zero-knowledge proof is generated locally  
-4. Proof is submitted to the Solana program  
-5. The program verifies the proof  
-6. NFT is minted if verification succeeds  
-
-Private inputs are never revealed on-chain.
-
----
-
 ## How It Works
 
-- Noir defines the privacy logic
-- Sunspot handles proof generation and verification
-- Solana program enforces minting rules on-chain
-- Frontend acts as a thin interaction layer
+1. User connects a Solana wallet
+2. Private input is provided to a Noir circuit
+3. A zero‑knowledge proof is generated locally
+4. Proof is submitted to the Solana program
+5. Program verifies the proof
+6. NFT is minted on success
+
+Private inputs never leave the client.
 
 ---
 
 ## Proof Generation (Sunspot)
 
-Sunspot is used for proving and verifying Noir circuits on Solana.
-Proofs are generated locally using Sunspot CLI binaries from the cloned repository.
+Sunspot is used to work with Noir circuits on Solana.
+
+Sunspot is difficult to run reliably in the browser, so proofs are generated **locally using CLI binaries from the cloned Sunspot repository**.
 
 ```bash
 git clone https://github.com/reilabs/sunspot.git
@@ -83,7 +87,7 @@ sunspot verify verifying_key.vk proof.proof public_witness.pw
 
 ## Environment Variables
 
-Create `frontend/.env.local`
+Create `frontend/.env.local`:
 
 ```bash
 NEXT_PUBLIC_SOLANA_CLUSTER_URL=https://api.devnet.solana.com
@@ -95,7 +99,7 @@ NEXT_PUBLIC_PROGRAM_ID=<program_id>
 ## Tech Stack
 
 - Solana
-- Rust, Anchor
+- Rust & Anchor
 - Noir (Nargo)
 - Sunspot
 - React / Next.js
@@ -120,18 +124,18 @@ GhostMint---ZK-NFT-Minting/
 
 ---
 
-## Limitations and Future Work
+## Limitations & Future Work
 
-- In-browser proof generation
+- In‑browser proof generation
 - Proof verification cost optimization
 - Multiple Noir circuit support
-- UX improvements
-- Mainnet readiness
+- Improved frontend UX
+- Mainnet readiness and audits
 
 ---
 
-## Team
+## Author
 
-Shushruth U  
+**Shushruth U**  
 BTech Student  
-Blockchain, Zero-Knowledge Proofs, Systems Programming
+Blockchain • Zero‑Knowledge Proofs • Systems Programming
