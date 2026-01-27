@@ -206,6 +206,9 @@ export default function MintPage() {
                         <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </Link>
                     <div className="flex items-center gap-4 md:gap-6">
+                        <Link href="/" className="text-zinc-400 hover:text-white transition-colors hidden md:block">
+                            Home
+                        </Link>
                         {mounted && <WalletMultiButton />}
                     </div>
                 </div>

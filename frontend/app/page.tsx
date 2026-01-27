@@ -60,6 +60,9 @@ export default function Home() {
                         <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </div>
                     <div className="hidden md:flex items-center gap-10">
+                        <Link href="/" className="text-zinc-400 hover:text-white transition-colors">
+                            Home
+                        </Link>
                         <a href="https://noir-lang.org" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
                             Noir
                         </a>

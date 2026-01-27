@@ -23,6 +23,64 @@ function useInView(ref: React.RefObject<HTMLElement | null>, threshold = 0.1) {
     return isInView;
 }
 
+function RoadmapItem({ item, index }: { item: any, index: number }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const inView = useInView(ref, 0.2);
+
+    return (
+        <div
+            ref={ref}
+            className={`relative flex flex-col md:flex-row items-center mb-8 md:mb-16 transition-all duration-1000 transform ${inView ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-24 scale-95'}`}
+            style={{ transitionDelay: `${index % 2 * 150}ms` }}
+        >
+            <div className={`w-full md:w-1/2 ${item.side === 'left' ? 'md:pr-16 md:text-right' : 'md:pl-16 md:order-2'}`}>
+                <div className={`relative group border ${item.borderColor} backdrop-blur-xl bg-gradient-to-br ${item.gradient} p-6 md:p-8 hover:scale-[1.02] transition-all duration-500 shadow-xl ${item.glowColor}`}>
+
+                    <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500`} />
+
+                    <div className="relative">
+                        <div className={`flex items-center gap-3 mb-4 ${item.side === 'left' ? 'md:justify-end' : ''}`}>
+                            <span className="text-3xl">{item.icon}</span>
+                            <span className="text-base text-violet-400 font-mono font-bold">{item.quarter}</span>
+                            <span className={`px-4 py-1.5 text-sm font-bold rounded-full ${item.status === 'Live' ? 'bg-green-500/30 text-green-300 border border-green-400/50 animate-pulse' :
+                                item.status === 'Building' ? 'bg-blue-500/30 text-blue-300 border border-blue-400/50' :
+                                    item.status === 'Planned' ? 'bg-violet-500/30 text-violet-300 border border-violet-400/50' :
+                                        'bg-pink-500/30 text-pink-300 border border-pink-400/50'
+                                }`}>
+                                {item.status}
+                            </span>
+                        </div>
+                        <h3 className="text-2xl md:text-4xl font-bold mb-3">{item.title}</h3>
+                        <p className="text-base md:text-lg text-zinc-300 mb-6 font-medium">{item.desc}</p>
+                        <ul className={`space-y-3 ${item.side === 'left' ? 'md:text-right' : ''}`}>
+                            {item.items.map((bullet: string, j: number) => (
+                                <li key={j} className={`text-sm md:text-base text-zinc-400 flex items-center gap-3 ${item.side === 'left' ? 'md:flex-row-reverse' : ''}`}>
+                                    <span className="w-2 h-2 bg-gradient-to-r from-violet-400 to-pink-400 rounded-full flex-shrink-0" />
+                                    {bullet}
+                                </li>
+                            ))}
+                        </ul>
+                        {item.connection && (
+                            <div className={`mt-6 pt-4 border-t border-white/10 ${item.side === 'left' ? 'md:text-right' : ''}`}>
+                                <p className="text-sm text-violet-400 font-semibold">
+                                    {item.connection}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-pink-500 items-center justify-center shadow-xl shadow-violet-500/50 z-10">
+                <div className={`w-4 h-4 rounded-full bg-white/90 transition-all duration-700 ${inView ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`} />
+            </div>
+
+            <div className={`hidden md:block w-1/2 ${item.side === 'left' ? 'md:order-2' : ''}`} />
+        </div>
+    );
+}
+
 export default function RoadmapPage() {
     const [mounted, setMounted] = useState(false);
     const roadmapRef = useRef<HTMLDivElement>(null);
@@ -34,6 +92,7 @@ export default function RoadmapPage() {
 
     return (
         <main className="min-h-screen bg-[#050508] text-white overflow-hidden">
+
             {/* Liquid glass background blobs */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-[-20%] left-[10%] w-[700px] h-[700px] rounded-full animate-blob-1"
@@ -44,9 +103,11 @@ export default function RoadmapPage() {
                     style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.15) 0%, transparent 60%)', filter: 'blur(60px)' }} />
             </div>
 
+
             {/* Noise texture */}
             <div className="fixed inset-0 opacity-[0.015] pointer-events-none"
                 style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")' }} />
+
 
             {/* Nav */}
             <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-black/30 border-b border-white/5">
@@ -56,6 +117,9 @@ export default function RoadmapPage() {
                         <span className="text-lg md:text-xl font-semibold tracking-tight">MintGhost</span>
                     </Link>
                     <div className="hidden md:flex items-center gap-10">
+                        <Link href="/" className="text-zinc-400 hover:text-white transition-colors">
+                            Home
+                        </Link>
                         <a href="https://noir-lang.org" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
                             Noir
                         </a>
@@ -78,6 +142,7 @@ export default function RoadmapPage() {
                 </div>
             </nav>
 
+
             {/* Hero */}
             <section className={`relative z-10 pt-32 md:pt-40 pb-12 md:pb-20 px-4 md:px-8 transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <div className="max-w-4xl mx-auto text-center">
@@ -94,11 +159,12 @@ export default function RoadmapPage() {
                 </div>
             </section>
 
+
             {/* Roadmap */}
             <section ref={roadmapRef} className="relative z-10 py-8 md:py-16 px-4 md:px-8">
                 <div className="max-w-6xl mx-auto">
                     <div className="relative">
-                        {/* Glowing timeline */}
+
                         <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 hidden md:block">
                             <div className="absolute inset-0 bg-gradient-to-b from-green-500 via-violet-500 to-pink-500/30 rounded-full" />
                             <div className="absolute inset-0 bg-gradient-to-b from-green-500 via-violet-500 to-pink-500/30 rounded-full blur-md opacity-50" />
@@ -158,60 +224,12 @@ export default function RoadmapPage() {
                                 connection: null
                             },
                         ].map((item, i) => (
-                            <div
-                                key={i}
-                                className={`relative flex flex-col md:flex-row items-center mb-8 md:mb-16 transition-all duration-700 ${roadmapInView || mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                                style={{ transitionDelay: `${300 + i * 200}ms` }}
-                            >
-                                <div className={`w-full md:w-1/2 ${item.side === 'left' ? 'md:pr-16 md:text-right' : 'md:pl-16 md:order-2'}`}>
-                                    <div className={`relative group border ${item.borderColor} backdrop-blur-xl bg-gradient-to-br ${item.gradient} p-6 md:p-8 hover:scale-[1.02] transition-all duration-500 shadow-xl ${item.glowColor}`}>
-                                        {/* Glow effect */}
-                                        <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500`} />
-
-                                        <div className="relative">
-                                            <div className={`flex items-center gap-3 mb-4 ${item.side === 'left' ? 'md:justify-end' : ''}`}>
-                                                <span className="text-3xl">{item.icon}</span>
-                                                <span className="text-base text-violet-400 font-mono font-bold">{item.quarter}</span>
-                                                <span className={`px-4 py-1.5 text-sm font-bold rounded-full ${item.status === 'Live' ? 'bg-green-500/30 text-green-300 border border-green-400/50 animate-pulse' :
-                                                        item.status === 'Building' ? 'bg-blue-500/30 text-blue-300 border border-blue-400/50' :
-                                                            item.status === 'Planned' ? 'bg-violet-500/30 text-violet-300 border border-violet-400/50' :
-                                                                'bg-pink-500/30 text-pink-300 border border-pink-400/50'
-                                                    }`}>
-                                                    {item.status}
-                                                </span>
-                                            </div>
-                                            <h3 className="text-2xl md:text-4xl font-bold mb-3">{item.title}</h3>
-                                            <p className="text-base md:text-lg text-zinc-300 mb-6 font-medium">{item.desc}</p>
-                                            <ul className={`space-y-3 ${item.side === 'left' ? 'md:text-right' : ''}`}>
-                                                {item.items.map((bullet, j) => (
-                                                    <li key={j} className={`text-sm md:text-base text-zinc-400 flex items-center gap-3 ${item.side === 'left' ? 'md:flex-row-reverse' : ''}`}>
-                                                        <span className="w-2 h-2 bg-gradient-to-r from-violet-400 to-pink-400 rounded-full flex-shrink-0" />
-                                                        {bullet}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            {item.connection && (
-                                                <div className={`mt-6 pt-4 border-t border-white/10 ${item.side === 'left' ? 'md:text-right' : ''}`}>
-                                                    <p className="text-sm text-violet-400 font-semibold">
-                                                        {item.connection}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Timeline node */}
-                                <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-pink-500 items-center justify-center shadow-xl shadow-violet-500/50">
-                                    <div className="w-4 h-4 rounded-full bg-white/90" />
-                                </div>
-
-                                <div className={`hidden md:block w-1/2 ${item.side === 'left' ? 'md:order-2' : ''}`} />
-                            </div>
+                            <RoadmapItem key={i} item={item} index={i} />
                         ))}
                     </div>
                 </div>
             </section>
+
 
             {/* CTA */}
             <section className="relative z-10 py-16 md:py-24 px-4 md:px-8">
@@ -228,6 +246,7 @@ export default function RoadmapPage() {
                     </div>
                 </div>
             </section>
+
 
             {/* Footer */}
             <footer className="relative z-10 border-t border-white/5 py-8 md:py-12 px-4 md:px-8 backdrop-blur-sm bg-black/20">
