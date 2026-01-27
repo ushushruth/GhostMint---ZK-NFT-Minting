@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #000000;
+  color: #ffffff;
+  font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wallet-adapter-button {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 6px !important;
+  font-family: inherit !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  padding: 10px 20px !important;
+  transition: all 0.2s ease !important;
+  color: white !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  height: auto !important;
+}
+
+.wallet-adapter-button:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(139, 92, 246, 0.5) !important;
+}
+
+.wallet-adapter-button-trigger {
+  background: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+}
+
+.wallet-adapter-button-trigger:hover {
+  background: #7c3aed !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background: rgba(0, 0, 0, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+.wallet-adapter-modal-container {
+  background: #000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+}
+
+.wallet-adapter-modal-title {
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+.wallet-adapter-modal-list li {
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  margin-bottom: 4px !important;
+}
+
+.wallet-adapter-modal-list li:hover {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+::selection {
+  background: #8b5cf6;
+  color: white;
+}
+
+input:focus,
+button:focus {
+  outline: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
