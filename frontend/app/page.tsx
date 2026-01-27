@@ -66,7 +66,7 @@ export default function Home() {
                         <a href="https://solana.com" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
                             Solana
                         </a>
-                        <a href="https://github.com/ushushruth" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
+                        <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-zinc-400 hover:text-white transition-colors">
                             GitHub
                         </a>
                         <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">
