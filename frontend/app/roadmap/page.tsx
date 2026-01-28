@@ -34,7 +34,7 @@ function RoadmapItem({ item, index }: { item: any, index: number }) {
             style={{ transitionDelay: `${index % 2 * 100}ms` }} // Minor stagger for side-by-side or rapid scroll
         >
             <div className={`w-full md:w-1/2 ${item.side === 'left' ? 'md:pr-16 md:text-right' : 'md:pl-16 md:order-2'}`}>
-                <div className={`relative group border ${item.borderColor} backdrop-blur-xl bg-gradient-to-br ${item.gradient} p-6 md:p-8 hover:scale-[1.02] transition-all duration-500 shadow-xl ${item.glowColor}`}>
+                <div className={`relative group border ${item.borderColor} backdrop-blur-xl bg-gradient-to-br ${item.gradient} p-6 md:p-8 hover:scale-[1.02] transition-all duration-500 shadow-xl rounded-2xl ${item.glowColor}`}>
 
                     <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500`} />
 
@@ -247,7 +247,7 @@ export default function RoadmapPage() {
                     <h2 className="text-3xl md:text-5xl font-bold mb-6">Start with MintGhost Today</h2>
                     <p className="text-lg md:text-xl text-zinc-400 mb-10">Experience the first step of the privacy stack — private NFT minting on Solana.</p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link href="/mint" className="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 px-10 py-5 text-lg font-semibold transition-all hover:shadow-xl hover:shadow-violet-500/20">
+                        <Link href="/mint" className="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 px-10 py-5 text-lg font-semibold transition-all hover:shadow-xl hover:shadow-violet-500/20 rounded-xl text-center">
                             Launch Minting App →
                         </Link>
                         <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="w-full sm:w-auto border border-zinc-600 backdrop-blur-sm bg-white/5 px-10 py-5 text-lg font-medium hover:border-zinc-400 hover:bg-white/10 transition-all text-center">

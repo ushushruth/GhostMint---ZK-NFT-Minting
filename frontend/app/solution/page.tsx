@@ -109,7 +109,7 @@ export default function SolutionPage() {
 
                                 {/* Mobile: Card (always renders for both left/right steps) */}
                                 <div className="md:hidden ml-10 w-full pr-2">
-                                    <div className={`bg-zinc-900/50 border border-white/10 p-4 rounded-xl ${step.side === 'left' ? 'border-l-2 border-l-violet-500' : 'border-l-2 border-l-pink-500'}`}>
+                                    <div className={`bg-zinc-900/50 border border-white/10 p-4 rounded-2xl ${step.side === 'left' ? 'border-l-2 border-l-violet-500' : 'border-l-2 border-l-pink-500'}`}>
                                         <h3 className={`text-base font-bold mb-1 ${step.side === 'left' ? 'text-violet-400' : 'text-pink-400'}`}>{step.title}</h3>
                                         <p className="text-zinc-400 text-sm leading-relaxed">{step.desc}</p>
                                     </div>
@@ -170,7 +170,7 @@ export default function SolutionPage() {
                     </div>
 
                     <div className={`mt-6 md:mt-10 text-center transition-all duration-700 delay-700 ${flowInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-                        <Link href="/mint" className="inline-block bg-white text-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-bold hover:bg-zinc-200 transition-all hover:scale-105 transform">
+                        <Link href="/mint" className="inline-block bg-white text-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-bold hover:bg-zinc-200 transition-all hover:scale-105 transform rounded-xl">
                             Start Minting Now
                         </Link>
                     </div>

@@ -402,7 +402,7 @@ export default function MintPage() {
                         <p className="text-base md:text-xl text-zinc-400">Enter your secret permit to claim your private NFT</p>
                     </div>
 
-                    <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] p-6 md:p-10">
+                    <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] p-6 md:p-10 rounded-2xl">
                         {publicKey ? (
                             <div className="mb-6 md:mb-10 pb-6 md:pb-8 border-b border-white/10">
                                 <span className="text-xs md:text-sm text-zinc-500 font-medium">Wallet Connected</span>
@@ -424,14 +424,14 @@ export default function MintPage() {
                                 value={secret}
                                 onChange={(e) => set_secret(e.target.value)}
                                 placeholder="Enter your secret"
-                                className="w-full bg-black/50 border border-white/10 px-4 md:px-6 py-4 md:py-5 text-base md:text-xl focus:border-violet-500/50 focus:outline-none transition-colors placeholder:text-zinc-600 font-mono backdrop-blur-sm"
+                                className="w-full bg-black/50 border border-white/10 px-4 md:px-6 py-4 md:py-5 text-base md:text-xl focus:border-violet-500/50 focus:outline-none transition-all placeholder:text-zinc-600 font-mono backdrop-blur-sm rounded-xl"
                             />
                         </div>
 
                         <button
                             onClick={handle_mint}
                             disabled={!publicKey || loading || !secret}
-                            className="w-full py-4 md:py-5 bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 text-base md:text-xl font-semibold transition-all disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/20"
+                            className="w-full py-4 md:py-5 bg-violet-600 hover:bg-violet-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 text-base md:text-xl font-semibold transition-all disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/20 rounded-xl"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2 md:gap-3">
@@ -442,7 +442,7 @@ export default function MintPage() {
                         </button>
 
                         {status && !loading && (
-                            <div className={`mt-6 md:mt-8 p-4 md:p-5 text-center text-sm md:text-lg font-medium backdrop-blur-sm ${status.includes('Success') ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
+                            <div className={`mt-6 md:mt-8 p-4 md:p-5 text-center text-sm md:text-lg font-medium backdrop-blur-sm rounded-xl ${status.includes('Success') ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
                                 status.includes('Already') || status.includes('Invalid') || status.includes('Error') ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
                                     'bg-white/5 border border-white/10 text-zinc-300'
                                 }`}>

@@ -67,11 +67,11 @@ export default function Home() {
                         <Link href="/solution" className="text-base text-zinc-400 hover:text-white transition-colors">Solution</Link>
                         <Link href="/roadmap" className="text-base text-zinc-400 hover:text-white transition-colors">Roadmap</Link>
                         <a href="https://github.com/ushushruth/GhostMint---ZK-NFT-Minting" target="_blank" className="text-zinc-400 hover:text-white transition-colors">GitHub</a>
-                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20">Mint →</Link>
+                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-6 py-3 font-medium transition-all hover:shadow-lg hover:shadow-violet-500/20 rounded-xl">Mint →</Link>
                     </div>
                     {/* Mobile: Hamburger + Mint button */}
                     <div className="flex md:hidden items-center gap-3">
-                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-3 py-1.5 text-sm font-medium rounded-md">Mint →</Link>
+                        <Link href="/mint" className="bg-violet-600 hover:bg-violet-500 px-3 py-1.5 text-sm font-medium rounded-xl">Mint →</Link>
                         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 text-white">
                             {mobileMenuOpen ? (
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -109,10 +109,10 @@ export default function Home() {
                         Zero-knowledge proofs Built with <a href="https://noir-lang.org" target="_blank" className="font-semibold text-white hover:text-violet-400 transition-colors">Noir</a> Verified on <a href="https://solana.com" target="_blank" className="font-semibold text-white hover:text-violet-400 transition-colors">Solana</a>.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
-                        <Link href="/mint" className="w-full sm:w-auto bg-white text-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-semibold hover:bg-zinc-100 transition-all hover:shadow-xl hover:shadow-white/10">
+                        <Link href="/mint" className="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 text-white px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-semibold transition-all hover:shadow-xl hover:shadow-violet-500/20 rounded-xl">
                             Start Minting
                         </Link>
-                        <a href="https://noir-lang.org/docs" target="_blank" className="w-full sm:w-auto border border-zinc-600 backdrop-blur-sm bg-white/5 px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-medium hover:border-zinc-400 hover:bg-white/10 transition-all text-center">
+                        <a href="https://noir-lang.org/docs" target="_blank" className="w-full sm:w-auto border border-zinc-600 backdrop-blur-sm bg-white/5 px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-medium hover:border-zinc-400 hover:bg-white/10 transition-all text-center rounded-xl">
                             Read Docs
                         </a>
                     </div>
@@ -136,7 +136,7 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
                         <div className={`group relative overflow-hidden transition-all duration-700 delay-200 ${featuresInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
                             <div className="absolute inset-0 bg-gradient-to-b from-violet-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-violet-500/30 transition-all duration-300">
+                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-violet-500/30 transition-all duration-300 rounded-2xl">
                                 <div className="w-14 h-14 border border-violet-500/40 flex items-center justify-center mb-8 backdrop-blur-sm bg-violet-500/10">
                                     <div className="w-6 h-6 bg-violet-400/60 rotate-45" />
                                 </div>
@@ -149,7 +149,7 @@ export default function Home() {
 
                         <div className={`group relative overflow-hidden transition-all duration-700 delay-300 ${featuresInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
                             <div className="absolute inset-0 bg-gradient-to-b from-blue-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-blue-500/30 transition-all duration-300">
+                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-blue-500/30 transition-all duration-300 rounded-2xl">
                                 <div className="w-14 h-14 border border-blue-500/40 flex items-center justify-center mb-8 backdrop-blur-sm bg-blue-500/10">
                                     <div className="w-6 h-6 border-2 border-blue-400/60 rounded-full" />
                                 </div>
@@ -162,7 +162,7 @@ export default function Home() {
 
                         <div className={`group relative overflow-hidden transition-all duration-700 delay-400 ${featuresInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
                             <div className="absolute inset-0 bg-gradient-to-b from-pink-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-pink-500/30 transition-all duration-300">
+                            <div className="relative border border-white/10 p-10 h-full backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] hover:border-pink-500/30 transition-all duration-300 rounded-2xl">
                                 <div className="w-14 h-14 border border-pink-500/40 flex items-center justify-center mb-8 backdrop-blur-sm bg-pink-500/10">
                                     <div className="w-8 h-[2px] bg-pink-400/60" />
                                     <div className="absolute w-[2px] h-8 bg-pink-400/60" />
@@ -197,7 +197,7 @@ export default function Home() {
                             </div>
                         </div>
                         <div className={`transition-all duration-700 delay-200 ${techInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-16'}`}>
-                            <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] overflow-hidden">
+                            <div className="border border-white/10 backdrop-blur-xl bg-white/[0.03] overflow-hidden rounded-2xl">
                                 <div className="flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
                                     <div className="w-3 h-3 rounded-full bg-red-500/70" />
                                     <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
@@ -236,7 +236,7 @@ export default function Home() {
                         ].map((item, i) => (
                             <div
                                 key={i}
-                                className={`p-6 border border-white/10 backdrop-blur-xl bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-700 ${useCasesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                                className={`p-6 border border-white/10 backdrop-blur-xl bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/20 transition-all duration-700 rounded-2xl ${useCasesInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                                 style={{ transitionDelay: `${200 + i * 100}ms` }}
                             >
                                 <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
@@ -252,7 +252,7 @@ export default function Home() {
                 <div className={`max-w-3xl mx-auto text-center transition-all duration-700 ${ctaInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
                     <h2 className="text-4xl md:text-6xl font-bold mb-6 md:mb-8">Ready to Mint?</h2>
                     <p className="text-lg md:text-2xl text-zinc-400 mb-8 md:mb-12">Enter your secret permit and claim your private NFT.</p>
-                    <Link href="/mint" className="inline-block bg-violet-600 hover:bg-violet-500 px-8 md:px-14 py-4 md:py-6 text-lg md:text-2xl font-semibold transition-all hover:shadow-xl hover:shadow-violet-500/20">
+                    <Link href="/mint" className="inline-block bg-violet-600 hover:bg-violet-500 px-8 md:px-14 py-4 md:py-6 text-lg md:text-2xl font-semibold transition-all hover:shadow-xl hover:shadow-violet-500/20 rounded-xl">
                         Launch Minting App →
                     </Link>
                 </div>

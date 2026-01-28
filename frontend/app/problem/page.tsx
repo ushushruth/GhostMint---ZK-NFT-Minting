@@ -101,7 +101,7 @@ export default function ProblemPage() {
                         ].map((item, i) => (
                             <div
                                 key={i}
-                                className={`p-5 md:p-10 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-red-500/30 transition-all duration-700 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+                                className={`p-5 md:p-10 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] hover:border-red-500/30 transition-all duration-700 rounded-2xl ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
                                 style={{ transitionDelay: `${i * 100}ms` }}
                             >
                                 <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 text-red-400">{item.title}</h3>
@@ -111,7 +111,7 @@ export default function ProblemPage() {
                     </div>
 
                     <div className={`mt-10 md:mt-20 text-center transition-all duration-700 delay-500 ${problemInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-                        <Link href="/solution" className="inline-block border border-white/10 hover:border-violet-500 hover:bg-violet-500/10 px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-medium transition-all">
+                        <Link href="/solution" className="inline-block border border-white/10 hover:border-violet-500 hover:bg-violet-500/10 px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-medium transition-all rounded-xl">
                             See The Solution →
                         </Link>
                     </div>
