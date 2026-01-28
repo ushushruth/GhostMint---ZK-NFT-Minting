@@ -20,6 +20,6 @@ const nextConfig: NextConfig = {
     }
     return config;
   },
-};
+} satisfies any;
 
 export default nextConfig;
