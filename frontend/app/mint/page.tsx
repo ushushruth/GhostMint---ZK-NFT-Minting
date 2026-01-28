@@ -94,7 +94,7 @@ export default function MintPage() {
             );
 
             const [nullifier_pda] = PublicKey.findProgramAddressSync(
-                [Buffer.from("nullifier_v8"), nullifier_hash],
+                [Buffer.from("nullifier_v10"), nullifier_hash],
                 program_id
             );
 
