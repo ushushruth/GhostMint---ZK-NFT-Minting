@@ -57,7 +57,6 @@ export default function MintPage() {
 
         try {
             set_loading(true);
-            set_txsignature('');
             set_status("Generating ZK proof in browser:>>>>...");
             const result = await browserProve(
                 secret,
@@ -138,22 +137,23 @@ export default function MintPage() {
             await connection.confirmTransaction(createSig, 'confirmed');
 
 
-            const chunkz_size = 800;
+            const chunkz_size = 900;
             const totalChunks = Math.ceil(proofbytes.length / chunkz_size);
-            const { blockhash: chunkBlockhash } = await connection.getLatestBlockhash();
 
             set_status(`Preparing ${totalChunks} chunk transactions...`);
+
+            const priorityFeeIx = ComputeBudgetProgram.setComputeUnitPrice({
+                microLamports: 50000,
+            });
 
             const chunkTxs: Transaction[] = [];
             for (let i = 0; i < totalChunks; i++) {
                 const offset = i * chunkz_size;
                 const chunk = proofbytes.slice(offset, offset + chunkz_size);
 
-                // Encode offset (u32 little-endian)
                 const offsetBytes = new Uint8Array(4);
                 new DataView(offsetBytes.buffer).setUint32(0, offset, true);
 
-                // Encode chunk as Vec<u8> (4-byte length + data)
                 const chunkLen = new Uint8Array(4);
                 new DataView(chunkLen.buffer).setUint32(0, chunk.length, true);
 
@@ -173,11 +173,17 @@ export default function MintPage() {
                     data: Buffer.from(writeData),
                 });
 
-                const writeTx = new Transaction().add(writeIx);
-                writeTx.recentBlockhash = chunkBlockhash;
-                writeTx.feePayer = publicKey;
+                const writeTx = new Transaction()
+                    .add(priorityFeeIx)
+                    .add(writeIx);
                 chunkTxs.push(writeTx);
             }
+
+            const { blockhash: chunkBlockhash, lastValidBlockHeight: chunkLastValidBlockHeight } = await connection.getLatestBlockhash();
+            chunkTxs.forEach(tx => {
+                tx.recentBlockhash = chunkBlockhash;
+                tx.feePayer = publicKey;
+            });
 
             set_status("Please approve all chunk transactions in wallet...");
             if (!signAllTransactions) {
@@ -185,19 +191,22 @@ export default function MintPage() {
             }
             const signedChunkTxs = await signAllTransactions(chunkTxs);
 
-            const signatures: string[] = [];
+            set_status("Sending all chunks...");
+            const chunkSigs: string[] = [];
             for (let i = 0; i < signedChunkTxs.length; i++) {
-                set_status(`Sending chunk ${i + 1}/${totalChunks}...`);
                 const sig = await connection.sendRawTransaction(signedChunkTxs[i].serialize(), {
                     skipPreflight: true,
-                    maxRetries: 3
                 });
-                signatures.push(sig);
+                chunkSigs.push(sig);
+                set_status(`Sent chunk ${i + 1}/${totalChunks}...`);
             }
 
-
-            set_status("Confirming uploads...");
-            await connection.confirmTransaction(signatures[signatures.length - 1], 'confirmed');
+            set_status("Waiting for chunks to confirm...");
+            await connection.confirmTransaction({
+                blockhash: chunkBlockhash,
+                lastValidBlockHeight: chunkLastValidBlockHeight,
+                signature: chunkSigs[chunkSigs.length - 1],
+            });
 
             set_status("Proof uploaded! Minting NFT...");
 
@@ -412,21 +421,20 @@ export default function MintPage() {
                                 status.includes('Already') || status.includes('Invalid') || status.includes('Error') ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
                                     'bg-white/5 border border-white/10 text-zinc-300'
                                 }`}>
-                                <div>{status}</div>
-                                {txsignature && status.includes('Success') && (
-                                    <a
-                                        href={`https://explorer.solana.com/tx/${txsignature}?cluster=devnet`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-block mt-3 text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium border-b border-violet-400/30 pb-0.5"
-                                    >
-                                        View on Solana Explorer →
-                                    </a>
-                                )}
+                                {status}
                             </div>
                         )}
 
-
+                        {txsignature && (
+                            <a
+                                href={`https://explorer.solana.com/tx/${txsignature}?cluster=devnet`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block mt-4 md:mt-6 text-center text-sm md:text-lg text-violet-400 hover:text-violet-300 transition-colors font-medium"
+                            >
+                                View on Solana Explorer →
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>
