@@ -310,16 +310,29 @@ export default function MintPage() {
             set_status("NFT Minted Successfully!");
         } catch (error: any) {
             console.error("Full error:", error);
-            const msg = error?.message || error?.toString() || "Unknown error";
+            console.error("Error JSON:", JSON.stringify(error, null, 2));
+
+            // Try to extract the actual error
+            let msg = "";
+            if (error?.logs) {
+                msg = error.logs.join(" ");
+            } else if (error?.message) {
+                msg = error.message;
+            } else if (error?.InstructionError) {
+                msg = JSON.stringify(error.InstructionError);
+            } else {
+                msg = JSON.stringify(error);
+            }
 
             if (
                 msg.includes("0x1772") ||
                 msg.includes("6002") ||
-                msg.includes("AlreadyMinted")
+                msg.includes("AlreadyMinted") ||
+                msg.includes("Custom")
             ) {
                 set_status("Already minted with this secret");
             } else {
-                set_status("Error: " + msg.slice(0, 80));
+                set_status("Error: " + msg.slice(0, 120));
             }
         } finally {
             set_loading(false);
