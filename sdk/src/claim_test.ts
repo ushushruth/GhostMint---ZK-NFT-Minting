@@ -25,7 +25,7 @@ async function main() {
     console.log("Nullifier hash:", nullifier_hash.toString('hex'));
 
     const [nullifier_pda] = PublicKey.findProgramAddressSync(
-        [Buffer.from('nullifier_v7'), nullifier_hash],
+        [Buffer.from('nullifier_v8'), nullifier_hash],
         program_id
     );
     const nft_mint = Keypair.generate();

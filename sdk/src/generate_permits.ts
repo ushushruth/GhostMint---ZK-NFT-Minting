@@ -1,5 +1,3 @@
-
-
 import { buildPoseidon } from 'circomlibjs';
 import * as fs from 'fs';
 

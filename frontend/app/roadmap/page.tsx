@@ -140,7 +140,7 @@ export default function RoadmapPage() {
                 </div>
                 {/* Mobile Menu Dropdown */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden border-t border-white/5 bg-black/90 backdrop-blur-xl">
+                    <div className="md:hidden border-t border-white/5 bg-black/30 backdrop-blur-xl">
                         <div className="flex flex-col py-4 px-6 space-y-4">
                             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Home</Link>
                             <Link href="/problem" onClick={() => setMobileMenuOpen(false)} className="text-zinc-400 hover:text-white py-2">Problem</Link>

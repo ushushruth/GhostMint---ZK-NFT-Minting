@@ -7,11 +7,11 @@ use anchor_spl::{
 
 declare_id!("iWckXfdhAruKcwhoBjo3cxCJC6FgiourmJLWaLtqCNy");
 
-
 pub const verifier_id: Pubkey = Pubkey::new_from_array([
     208, 238, 128, 178, 240, 192, 20, 219, 204, 57, 34, 220, 99, 60, 87, 24,
     108, 41, 15, 243, 242, 48, 187, 151, 229, 61, 164, 123, 113, 134, 87, 238
 ]);
+
 #[program]
 pub mod mintghost {
     use super::*;
@@ -45,42 +45,42 @@ pub mod mintghost {
         Ok(())
     }
 
+    // ======================================================
+    pub fn write_proof(ctx: Context<WriteProof>, offset: u32, proof_bytes: Vec<u8>) -> Result<()> {
+        let proof_account = &ctx.accounts.proof_account;
+        let mut data = proof_account.try_borrow_mut_data()?;
+        let start = offset as usize;
+        let end = start + proof_bytes.len();
+        require!(end <= data.len(), ErrorCode::InvalidWitness);
+        data[start..end].copy_from_slice(&proof_bytes);
+        msg!("Proof chunk written: {} bytes at offset {}", proof_bytes.len(), offset);
+        Ok(())
+    }
 
     pub fn verify_proof(
         ctx: Context<VerifyProof>,
-        proof: Vec<u8>,
-        witness: Vec<u8>,
         nullifier_hash: [u8; 32],
     ) -> Result<()> {
-        msg!("Verifying proof: {} bytes", proof.len());
-        require!(witness.len() >= 44, ErrorCode::InvalidWitness);
-        let public_root: [u8; 32] = witness[12..44].try_into().unwrap();
-        
+        // ======================================================
+        let proof_data = ctx.accounts.proof_account.data.borrow();
+
+        require!(proof_data.len() >= 44, ErrorCode::InvalidWitness);
+
+        let public_root: [u8; 32] = proof_data[12..44].try_into().unwrap();
+
         //check root
         require!(
             public_root == ctx.accounts.config.merkle_root,
             ErrorCode::RootMismatch
         );
 
-        let mut data = Vec::with_capacity(proof.len() + witness.len());
-        data.extend_from_slice(&proof);
-        data.extend_from_slice(&witness);
 
-
-        let ix = Instruction {
-            program_id: verifier_id,
-            accounts: vec![],
-            data,
-        };
-        invoke(&ix, &[])?;
-        msg!("PROOF VERIFIED!");
-
+        msg!("Root verified! Verifier called from frontend.");
 
         require!(ctx.accounts.nullifier.status == 0, ErrorCode::AlreadyMinted);
         ctx.accounts.nullifier.status = 1;
         ctx.accounts.nullifier.bump = ctx.bumps.nullifier;
 
-        
         ctx.accounts.config.mint_count += 1;
         msg!("Verification #{} complete!", ctx.accounts.config.mint_count);
 
@@ -91,7 +91,7 @@ pub mod mintghost {
         require!(ctx.accounts.nullifier.status == 1, ErrorCode::NotVerified);
 
         let seeds = &[b"config".as_ref(), &[ctx.accounts.config.bump]];
-        let signer = &[&seeds[..]]; 
+        let signer = &[&seeds[..]];
         mint_to(
             CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
@@ -104,12 +104,36 @@ pub mod mintghost {
             ),
             1,
         )?;
-        ctx.accounts.nullifier.status = 2;  
+        ctx.accounts.nullifier.status = 2;
         msg!("NFT MINTED!!!>>>>>");
+        Ok(())
+    }
+
+    pub fn close_proof_account(ctx: Context<CloseProof>) -> Result<()> {
+        let lamports = **ctx.accounts.proof_account.lamports.borrow();
+        **ctx.accounts.proof_account.lamports.borrow_mut() = 0;
+        **ctx.accounts.user.lamports.borrow_mut() += lamports;
         Ok(())
     }
 }
 
+#[derive(Accounts)]
+pub struct CloseProof<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+    #[account(mut)]
+    pub proof_account: AccountInfo<'info>,
+}
+
+// ======================================================
+#[derive(Accounts)]
+pub struct WriteProof<'info> {
+    #[account(mut)]
+    pub user: Signer<'info>,
+
+    #[account(mut)]
+    pub proof_account: AccountInfo<'info>,
+}
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
@@ -139,29 +163,27 @@ pub struct UpdateRoot<'info> {
     pub config: Account<'info, MintghostAccount>,
 }
 
-
-
 #[derive(Accounts)]
 #[instruction(nullifier_hash: [u8; 32])]
 pub struct ClaimNft<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    
+
     #[account(
         mut,
         seeds = [b"config"],
         bump = config.bump
     )]
     pub config: Account<'info, MintghostAccount>,
-    
+
     #[account(
         mut,
-        seeds = [b"nullifier_v7", nullifier_hash.as_ref()],
+        seeds = [b"nullifier_v8", nullifier_hash.as_ref()],
         bump = nullifier.bump,
         constraint = nullifier.status == 1 @ ErrorCode::NotVerified
     )]
     pub nullifier: Account<'info, Nullifier>,
-    
+
     #[account(
         init,
         payer = user,
@@ -169,7 +191,7 @@ pub struct ClaimNft<'info> {
         mint::authority = config,
     )]
     pub nft_mint: Account<'info, Mint>,
-    
+
     #[account(
         init,
         payer = user,
@@ -177,39 +199,39 @@ pub struct ClaimNft<'info> {
         associated_token::authority = user,
     )]
     pub token_account: Account<'info, TokenAccount>,
-    
+
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub rent: Sysvar<'info, Rent>,
 }
 
-
-
-
-
-
-
-
 #[derive(Accounts)]
-#[instruction(proof: Vec<u8>, witness: Vec<u8>, nullifier_hash: [u8; 32])]
+#[instruction(nullifier_hash: [u8; 32])]
 pub struct VerifyProof<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
+
     #[account(
         mut,
         seeds = [b"config"],
         bump = config.bump
     )]
     pub config: Account<'info, MintghostAccount>,
+
     #[account(
         init_if_needed,
         payer = user,
         space = 8 + 2,
-        seeds = [b"nullifier_v7", nullifier_hash.as_ref()],
+        seeds = [b"nullifier_v8", nullifier_hash.as_ref()],
         bump,
     )]
     pub nullifier: Account<'info, Nullifier>,
+
+    // ======================================================
+    #[account(mut)]
+    pub proof_account: AccountInfo<'info>,
+
     pub system_program: Program<'info, System>,
     pub verifier_program: UncheckedAccount<'info>,
 }
@@ -232,7 +254,7 @@ pub struct MintghostAccount {
 #[account]
 #[derive(InitSpace)]
 pub struct Nullifier {
-    pub status: u8,  
+    pub status: u8,
     pub bump: u8,
 }
 

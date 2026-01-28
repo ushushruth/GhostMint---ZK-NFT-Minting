@@ -1,10 +1,4 @@
-// Output from tree_gen (24 values):
-// [0-7]: leaves (hash of secrets 1001-1008)
-// [8-11]: level1 (4 nodes)
-// [12-13]: level2 (2 nodes)  
-// [14]: subtree_root (root of 8-leaf tree)
-// [15]: final_root (root of full depth-20 tree)
-// [16-23]: zeros[3..10] (empty subtree hashes for levels 3-10)
+
 
 const output = [
     "0x2f0409f7962f6673570d88b917021c615ea575c2654391718439eb354f9be8f3", // leaf 0
@@ -38,31 +32,6 @@ const level1 = output.slice(8, 12);
 const level2 = output.slice(12, 14);
 const subtree_root = output[14];
 const final_root = output[15];
-const zeros = output.slice(16, 24); // zeros[3] through zeros[10]
-
-// We need zeros for levels 11-19 too. They follow the same pattern.
-// But we only have zeros[3..10]. For a proper solution we need all 20 zeros.
-// Let me compute them - they're all the same: zeros[i] = hash(zeros[i-1], zeros[i-1])
-// Since we can't run Noir here, let's check if we already have enough...
-
-// Actually, looking at the circuit:
-// - Our 8 secrets are at indices 0-7 (first 8 leaves)
-// - Index bits: 0=000, 1=001, 2=010, 3=011, 4=100, 5=101, 6=110, 7=111
-// - For depth 20, bits 0-2 pick within our 8-leaf subtree
-// - Bits 3-19 are always 0 (we're in the leftmost subtree)
-
-// So for secret at index 0:
-// bit 0 = 0: sibling is leaf[1]
-// bit 1 = 0: sibling is level1[1]  
-// bit 2 = 0: sibling is level2[1]
-// bit 3..19 = 0: siblings are zeros[3..19]
-
-// We need to extend zeros to level 19. Let me cheat and output more zeros from the circuit.
-// For now, let's ask the user to run the circuit again with more zeros output.
-
-// Actually I realize we need zeros up to level 19. Let me compute what we need:
-// zeros[3..10] = 8 values, we need zeros[3..19] = 17 values
-// We're missing zeros[11..19] = 9 more values
-
+const zeros = output.slice(16, 24);
 console.log("Need to re-run circuit to get all zeros up to level 19");
 console.log("Current final_root:", final_root);

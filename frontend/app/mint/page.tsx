@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { browserProve } from '@/lib/browser_prover';
 import Link from 'next/link';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
@@ -24,7 +25,7 @@ const verifier_id = new PublicKey('F4ajai56YytKeKFg2mjuhAhNMPqzJLpUNrVxsoo3qnyB'
 
 export default function MintPage() {
     const [secret, set_secret] = useState('');
-    const { publicKey, signTransaction } = useWallet();
+    const { publicKey, signTransaction, signAllTransactions } = useWallet();
     const { connection } = useConnection();
     const [status, set_status] = useState('');
     const [loading, set_loading] = useState(false);
@@ -46,41 +47,55 @@ export default function MintPage() {
     const handle_mint = async () => {
         const permit = permits?.permits.find((p: any) => p.secret === secret);
         if (!permit) {
-            set_status('Invalid secret');
+            set_status("Invalid secret");
             return;
         }
         if (!publicKey) {
-            set_status('Connect wallet first');
+            set_status("Connect wallet first:<");
             return;
         }
+
         try {
             set_loading(true);
-            set_status('Generating ZK proof...');
-            const response = await fetch('/api/prove', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    the_secret: secret,
-                    index: permit.index,
-                    hash_path: permit.hash_path,
-                    root: permits.root
-                })
-            });
-            const { proof: proofB64, witness: witnessB64 } = await response.json();
-            const proof = Uint8Array.from(atob(proofB64), c => c.charCodeAt(0));
-            const witness = Uint8Array.from(atob(witnessB64), c => c.charCodeAt(0));
+            set_txsignature('');
+            set_status("Generating ZK proof in browser:>>>>...");
+            const result = await browserProve(
+                secret,
+                permit.index,
+                permit.hash_path,
+                permits.root
+            );
+
+            const rawProof = result.proof.proof;
+            const publicInputs = result.proof.publicInputs;
+
+            const rootHex = publicInputs[0].replace('0x', '');
+            const rootBytes = new Uint8Array(32);
+            for (let i = 0; i < 32; i++) {
+                rootBytes[i] = parseInt(rootHex.slice(i * 2, i * 2 + 2), 16);
+            }
+
+
+            const padding = new Uint8Array(12);
+            const proofbytes = new Uint8Array(12 + 32 + rawProof.length);
+            proofbytes.set(padding, 0);
+            proofbytes.set(rootBytes, 12);
+            proofbytes.set(rawProof, 44);
+
+            console.log("Proof generated!", proofbytes.length, "bytes (with root prepended)");
 
             const secretBytes = new TextEncoder().encode(secret);
             const nullifier_hash = sha256(secretBytes);
-            set_status('Building transaction...');
+
+            set_status("Building transaction...");
 
             const [config_pda] = PublicKey.findProgramAddressSync(
-                [Buffer.from('config')],
+                [Buffer.from("config")],
                 program_id
             );
 
             const [nullifier_pda] = PublicKey.findProgramAddressSync(
-                [Buffer.from('nullifier_v7'), nullifier_hash],
+                [Buffer.from("nullifier_v8"), nullifier_hash],
                 program_id
             );
 
@@ -90,24 +105,118 @@ export default function MintPage() {
                 publicKey
             );
 
-            function toBytes(data: Uint8Array): Uint8Array {
-                const len = new Uint8Array(4);
-                new DataView(len.buffer).setUint32(0, data.length, true);
-                return new Uint8Array([...len, ...data]);
+            const proofAccount = Keypair.generate();
+
+            const lamports =
+                await connection.getMinimumBalanceForRentExemption(
+                    proofbytes.length
+                );
+
+            const createProofAccountIx = SystemProgram.createAccount({
+                fromPubkey: publicKey,
+                newAccountPubkey: proofAccount.publicKey,
+                space: proofbytes.length,
+                lamports,
+                programId: program_id,
+            });
+
+            // ============================
+            const write_proof_discriminator = new Uint8Array([158, 128, 57, 75, 92, 21, 121, 193]);
+
+            // ==========================================================
+            set_status("Creating proof account...");
+            const createTx = new Transaction().add(createProofAccountIx);
+            createTx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+            createTx.feePayer = publicKey;
+            createTx.partialSign(proofAccount);
+
+            if (!signTransaction) {
+                throw new Error("Wallet does not support signing");
+            }
+            const signedCreateTx = await signTransaction(createTx);
+            const createSig = await connection.sendRawTransaction(signedCreateTx.serialize(), { skipPreflight: true });
+            await connection.confirmTransaction(createSig, 'confirmed');
+
+
+            const chunkz_size = 800;
+            const totalChunks = Math.ceil(proofbytes.length / chunkz_size);
+            const { blockhash: chunkBlockhash } = await connection.getLatestBlockhash();
+
+            set_status(`Preparing ${totalChunks} chunk transactions...`);
+
+            const chunkTxs: Transaction[] = [];
+            for (let i = 0; i < totalChunks; i++) {
+                const offset = i * chunkz_size;
+                const chunk = proofbytes.slice(offset, offset + chunkz_size);
+
+                // Encode offset (u32 little-endian)
+                const offsetBytes = new Uint8Array(4);
+                new DataView(offsetBytes.buffer).setUint32(0, offset, true);
+
+                // Encode chunk as Vec<u8> (4-byte length + data)
+                const chunkLen = new Uint8Array(4);
+                new DataView(chunkLen.buffer).setUint32(0, chunk.length, true);
+
+                const writeData = new Uint8Array([
+                    ...write_proof_discriminator,
+                    ...offsetBytes,
+                    ...chunkLen,
+                    ...chunk
+                ]);
+
+                const writeIx = new TransactionInstruction({
+                    programId: program_id,
+                    keys: [
+                        { pubkey: publicKey, isSigner: true, isWritable: true },
+                        { pubkey: proofAccount.publicKey, isSigner: false, isWritable: true },
+                    ],
+                    data: Buffer.from(writeData),
+                });
+
+                const writeTx = new Transaction().add(writeIx);
+                writeTx.recentBlockhash = chunkBlockhash;
+                writeTx.feePayer = publicKey;
+                chunkTxs.push(writeTx);
             }
 
-            const verify_discriminator = new Uint8Array([217, 211, 191, 110, 144, 13, 186, 98]);
+            set_status("Please approve all chunk transactions in wallet...");
+            if (!signAllTransactions) {
+                throw new Error("Wallet does not support batch signing");
+            }
+            const signedChunkTxs = await signAllTransactions(chunkTxs);
+
+            const signatures: string[] = [];
+            for (let i = 0; i < signedChunkTxs.length; i++) {
+                set_status(`Sending chunk ${i + 1}/${totalChunks}...`);
+                const sig = await connection.sendRawTransaction(signedChunkTxs[i].serialize(), {
+                    skipPreflight: true,
+                    maxRetries: 3
+                });
+                signatures.push(sig);
+            }
+
+
+            set_status("Confirming uploads...");
+            await connection.confirmTransaction(signatures[signatures.length - 1], 'confirmed');
+
+            set_status("Proof uploaded! Minting NFT...");
+
+            // ==========================================================
+            const verify_discriminator = new Uint8Array([
+                217, 211, 191, 110, 144, 13, 186, 98
+            ]);
+
             const verify_data = new Uint8Array([
                 ...verify_discriminator,
-                ...toBytes(proof),
-                ...toBytes(witness),
                 ...nullifier_hash,
             ]);
+
             const verify_instruction = new TransactionInstruction({
                 keys: [
                     { pubkey: publicKey, isSigner: true, isWritable: true },
                     { pubkey: config_pda, isSigner: false, isWritable: true },
                     { pubkey: nullifier_pda, isSigner: false, isWritable: true },
+                    { pubkey: proofAccount.publicKey, isSigner: false, isWritable: true },
                     { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
                     { pubkey: verifier_id, isSigner: false, isWritable: false },
                 ],
@@ -115,11 +224,16 @@ export default function MintPage() {
                 data: Buffer.from(verify_data),
             });
 
-            const claim_discriminator = new Uint8Array([6, 193, 146, 120, 48, 218, 69, 33]);
+            // ============================
+            const claim_discriminator = new Uint8Array([
+                6, 193, 146, 120, 48, 218, 69, 33
+            ]);
+
             const claim_data = new Uint8Array([
                 ...claim_discriminator,
-                ...nullifier_hash
+                ...nullifier_hash,
             ]);
+
             const claim_instruction = new TransactionInstruction({
                 keys: [
                     { pubkey: publicKey, isSigner: true, isWritable: true },
@@ -136,53 +250,60 @@ export default function MintPage() {
                 data: Buffer.from(claim_data),
             });
 
-            set_status('Sending transaction...');
 
+            // ============================
             const computeBudgetIx = ComputeBudgetProgram.setComputeUnitLimit({
-                units: 1_400_000
+                units: 1_400_000,
             });
+
+            // ==========================================================
 
             const transaction = new Transaction()
                 .add(computeBudgetIx)
                 .add(verify_instruction)
                 .add(claim_instruction);
 
-            const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+            const { blockhash, lastValidBlockHeight } =
+                await connection.getLatestBlockhash();
+
             transaction.recentBlockhash = blockhash;
             transaction.feePayer = publicKey;
             transaction.partialSign(nft_mint);
 
             if (!signTransaction) {
-                throw new Error('Wallet does not support signing');
+                throw new Error("Wallet does not support signing");
             }
+
             const signedTx = await signTransaction(transaction);
-            const signature = await connection.sendRawTransaction(signedTx.serialize());
+            const signature = await connection.sendRawTransaction(
+                signedTx.serialize()
+            );
 
             await connection.confirmTransaction({
                 blockhash,
                 lastValidBlockHeight,
-                signature
+                signature,
             });
 
             set_txsignature(signature);
-            set_status('NFT Minted Successfully!');
+            set_status("NFT Minted Successfully!");
+        } catch (error: any) {
+            console.error("Full error:", error);
+            const msg = error?.message || error?.toString() || "Unknown error";
 
-        }
-        catch (error: any) {
-            console.error('Full error:', error);
-            const msg = error?.message || error?.toString() || 'Unknown error';
-
-            if (msg.includes('0x1772') || msg.includes('6002') || msg.includes('AlreadyMinted')) {
-                set_status('Already minted with this secret');
+            if (
+                msg.includes("0x1772") ||
+                msg.includes("6002") ||
+                msg.includes("AlreadyMinted")
+            ) {
+                set_status("Already minted with this secret");
             } else {
-                set_status('Error: ' + msg.slice(0, 50));
+                set_status("Error: " + msg.slice(0, 80));
             }
-        }
-        finally {
+        } finally {
             set_loading(false);
         }
     };
-
     return (
         <main className="min-h-screen bg-[#050508] text-white">
             {/* Liquid glass background blobs */}
@@ -291,20 +412,21 @@ export default function MintPage() {
                                 status.includes('Already') || status.includes('Invalid') || status.includes('Error') ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
                                     'bg-white/5 border border-white/10 text-zinc-300'
                                 }`}>
-                                {status}
+                                <div>{status}</div>
+                                {txsignature && status.includes('Success') && (
+                                    <a
+                                        href={`https://explorer.solana.com/tx/${txsignature}?cluster=devnet`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block mt-3 text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium border-b border-violet-400/30 pb-0.5"
+                                    >
+                                        View on Solana Explorer →
+                                    </a>
+                                )}
                             </div>
                         )}
 
-                        {txsignature && (
-                            <a
-                                href={`https://explorer.solana.com/tx/${txsignature}?cluster=devnet`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block mt-4 md:mt-6 text-center text-sm md:text-lg text-violet-400 hover:text-violet-300 transition-colors font-medium"
-                            >
-                                View on Solana Explorer →
-                            </a>
-                        )}
+
                     </div>
                 </div>
             </div>
