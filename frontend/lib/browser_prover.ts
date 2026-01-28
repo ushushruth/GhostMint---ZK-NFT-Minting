@@ -47,14 +47,6 @@ export async function browserProve(
     const backend = new UltraHonkBackend(compiledCircuit.bytecode);
     const proof = await backend.generateProof(witness);
 
-    // Debug: Log proof structure
-    console.log("=== PROOF STRUCTURE ===");
-    console.log("proof object keys:", Object.keys(proof));
-    console.log("proof.proof length:", proof.proof?.length);
-    console.log("proof.proof (first 100 bytes):", proof.proof?.slice(0, 100));
-    console.log("proof.publicInputs:", proof.publicInputs);
-    console.log("Full proof object:", JSON.stringify(proof, (key, value) =>
-        value instanceof Uint8Array ? `Uint8Array(${value.length})` : value, 2));
 
     const verified = await backend.verifyProof(proof);
 
