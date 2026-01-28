@@ -98,6 +98,8 @@ export default function MintPage() {
                 program_id
             );
 
+            console.log("Nullifier PDA:", nullifier_pda.toString(), "Hash:", Buffer.from(nullifier_hash).toString('hex'));
+
             const nft_mint = Keypair.generate();
             const token_account = await getAssociatedTokenAddress(
                 nft_mint.publicKey,
