@@ -220,6 +220,15 @@ export default function MintPage() {
                 ...nullifier_hash,
             ]);
 
+            console.log("Verify accounts:", {
+                user: publicKey.toString(),
+                config: config_pda.toString(),
+                nullifier: nullifier_pda.toString(),
+                proofAccount: proofAccount.publicKey.toString(),
+                system: SystemProgram.programId.toString(),
+                verifier: verifier_id.toString(),
+            });
+
             const verify_instruction = new TransactionInstruction({
                 keys: [
                     { pubkey: publicKey, isSigner: true, isWritable: true },
@@ -285,7 +294,8 @@ export default function MintPage() {
 
             const signedTx = await signTransaction(transaction);
             const signature = await connection.sendRawTransaction(
-                signedTx.serialize()
+                signedTx.serialize(),
+                { skipPreflight: true }
             );
 
             await connection.confirmTransaction({
