@@ -178,7 +178,7 @@ pub struct ClaimNft<'info> {
 
     #[account(
         mut,
-        seeds = [b"nullifier_v71", nullifier_hash.as_ref()],
+        seeds = [b"nullifier_v79", nullifier_hash.as_ref()],
         bump = nullifier.bump,
         constraint = nullifier.status == 1 @ ErrorCode::NotVerified
     )]
@@ -223,7 +223,7 @@ pub struct VerifyProof<'info> {
         init_if_needed,
         payer = user,
         space = 8 + 2,
-        seeds = [b"nullifier_v70", nullifier_hash.as_ref()],
+        seeds = [b"nullifier_v79", nullifier_hash.as_ref()],
         bump,
     )]
     pub nullifier: Account<'info, Nullifier>,
